@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shristi❤️Shreekant</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Roboto:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- Animated Background Hearts -->
+    <div class="hearts-background">
+      <div class="heart"></div>
+      <div class="heart"></div>
+      <div class="heart"></div>
+      <div class="heart"></div>
+      <div class="heart"></div>
+      <div class="heart"></div>
+      <div class="heart"></div>
+      <div class="heart"></div>
+    </div>
+
+    <!-- Twinkling Stars -->
+    <div class="stars">
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+      <div class="star"></div>
+    </div>
+
+    <!-- Music Player -->
+    <div class="music-player">
+      <button id="musicToggle" class="music-btn">
+        <i class="fas fa-music"></i>
+        <span>Play Music</span>
+      </button>
+      <audio id="backgroundMusic" loop>
+        <source
+          src="{{ url_for('static', filename='audio/song.mp3') }}"
+          type="audio/mpeg"
+        />
+      </audio>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+      <!-- Welcome Section -->
+      <section class="welcome-section">
+        <div class="welcome-content fade-in">
+          <h1 class="main-title">
+            <span class="greeting">Hey Beautiful</span>
+            <span class="name">{{ girlfriend_name }} ✨</span>
+          </h1>
+          <p class="subtitle">
+            This website is created just for you, my love, my chota Don. Every
+            pixel, every word, every memory here is a celebration of us 💕
+          </p>
+          <p class="subtitle-note">
+            You are my sunrise, my blessing, my best memory, and my forever, you
+            are my sona baby 🌅
+          </p>
+          <div class="flower-decoration">
+            <span class="flower">🌹</span>
+            <span class="flower">🌺</span>
+            <span class="flower">🌸</span>
+            <span class="flower">🌷</span>
+            <span class="flower">🌹</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Our Memories Section -->
+      <section class="memories-section">
+        <h2 class="section-title">Our Beautiful Journey Together 📸</h2>
+        <p class="memories-subtitle">
+          Every moment with you is a treasure, Shristi ✨
+        </p>
+
+        <div class="carousel-container">
+          <button class="carousel-btn prev" onclick="changeSlide(-1)">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+
+          <div class="carousel">
+            {% for memory in memories %}
+            <div class="carousel-slide {% if loop.first %}active{% endif %}">
+              <div class="memory-card">
+                <div
+                  class="memory-image"
+                  onclick="openModal('{{ url_for('static', filename='images/' + memory.image) }}', '{{ memory.caption }}', '{{ memory.quote }}')"
+                >
+                  <img
+                    src="{{ url_for('static', filename='images/' + memory.image) }}"
+                    alt="{{ memory.caption }}"
+                  />
+                </div>
+                <p class="memory-caption">{{ memory.caption }}</p>
+                <p class="memory-quote">"{{ memory.quote }}"</p>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+
+          <button class="carousel-btn next" onclick="changeSlide(1)">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+
+        <div class="carousel-dots">
+          {% for memory in memories %}
+          <span
+            class="dot {% if loop.first %}active{% endif %}"
+            onclick="goToSlide({{ loop.index0 }})"
+          ></span>
+          {% endfor %}
+        </div>
+      </section>
+
+      <!-- 120 Reasons Why I Love You Section -->
+      <section class="reasons-section">
+        <h2 class="section-title">120 Reasons Why I Love You, Shristi 💖</h2>
+        <p class="reasons-subtitle">
+          Every single thing about you makes me fall deeper in love ✨
+        </p>
+
+        <div class="reasons-showcase">
+          <div class="reasons-counter">
+            <div class="counter-circle">
+              <span id="reasonNumber" class="counter-number">1</span>
+              <span class="counter-label">of 120</span>
+            </div>
+          </div>
+
+          <div class="reason-display">
+            <div class="reason-icon">💕</div>
+            <p id="currentReason" class="reason-text">
+              Click the button below to discover why I love you!
+            </p>
+          </div>
+
+          <button class="reveal-reason-btn" onclick="revealReason()">
+            <i class="fas fa-heart-circle-plus"></i>
+            Reveal Another Reason
+          </button>
+        </div>
+
+        <!-- Grid view of all 120 reasons -->
+        <div class="all-reasons-container">
+          <button class="show-all-btn" onclick="toggleAllReasons()">
+            <i class="fas fa-list-heart"></i>
+            <span id="showAllText">Show All 120 Reasons</span>
+          </button>
+
+          <div
+            id="allReasonsList"
+            class="all-reasons-grid"
+            style="display: none"
+          >
+            {% for reason in reasons %}
+            <div class="reason-card">
+              <span class="reason-number">{{ loop.index }}</span>
+              <p class="reason-item">{{ reason }}</p>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </section>
+
+      <!-- Interactive Surprise Section -->
+      <section class="surprise-section">
+        <h2 class="section-title">Special Surprises For You 🎁</h2>
+        <p class="surprise-subtitle">
+          Shristi, click these buttons to discover what's in my heart for you 💕
+        </p>
+
+        <!-- Special Memory Message -->
+        <div class="special-memory-message">
+          <div class="memory-content">
+            <p>
+              Baby, jab bhi main wapas soochta hoon un lamhon ke baare mein, dil
+              khush ho jata hai. Har ek pal tumhare saath kuch alag hi special
+              hai.
+            </p>
+
+            <p>
+              Wo pehli baar jab tumne mere haath mein haath rakha tha—us moment
+              ko main kabhi bhool nahi sakta. Main tumhe bata nahi sakta ki main
+              us time kaisa feel kar raha tha, bas itna keh sakta hoon ki world
+              ki best feeling thi wo. Aur phir jab tumne mere haath pe apna sar
+              rakha, matlab duniya ki har khushi us ek pal mein aa gayi thi. It
+              was pure magic, baby. ✨
+            </p>
+
+            <p>
+              Phir aayi wo subah—<strong>19th September 2025</strong>—jab humne
+              saath mein apna pehla sunrise dekha. Us din maine apne pure life
+              ka first kiss kiya tumhare saath. Incredible se bhi zyada kuch tha
+              wo moment. Koi bhi shabd feeka pad jata hai us feeling ko describe
+              karne ke liye. Wo pal, wo ehsaas—sab kuch perfect tha.
+            </p>
+
+            <p>
+              Jab hum dono mandir gaye the saath mein, ek dusre ka haath mein
+              haath dalke—us din aisa laga jaise Bhagwan ne khud humari raah pe
+              apna aashirwaad de diya. Itna sukoon mila us din, itni shanti. Tum
+              mere saath thi, aur bas wahi kaafi tha.
+            </p>
+
+            <p>
+              Aur wo din jab hum pehli baar color coordinated kapde pehne
+              the—matlab tum nahi jaanti main kitna khush tha us din. Mujhe us
+              time tak koi fark hi nahi pada ki duniya kya soch rahi hai, log
+              kya keh rahe hain. Bas tum thi mere saath, aur main tha tumhare
+              saath. That's all that mattered to me. Tumhare saath matching
+              karna, saath chalna—ye chhoti chhoti cheezein hi toh sabse badi
+              khushiyaan ban jaati hain. 💫
+            </p>
+          </div>
+        </div>
+
+        <div class="surprise-buttons">
+          <button class="surprise-btn" onclick="getSurprise('surprises')">
+            <i class="fas fa-heart"></i>
+            Our Sweet Memories
+          </button>
+          <button class="surprise-btn" onclick="getSurprise('compliments')">
+            <i class="fas fa-star"></i>
+            What I Love About You
+          </button>
+          <button class="surprise-btn" onclick="getSurprise('future_promises')">
+            <i class="fas fa-infinity"></i>
+            Our Future Together
+          </button>
+        </div>
+
+        <div id="surpriseResult" class="surprise-result"></div>
+      </section>
+
+      <!-- Custom Messages Section -->
+      <section class="custom-messages-section">
+        <h2 class="section-title">Our Private Message Wall 📝</h2>
+        <p class="section-subtitle">
+          A space just for us to share our thoughts and feelings 💕
+        </p>
+
+        <div class="add-message-form">
+          <h3>Write Your Heart Out, Shristi 💌</h3>
+          <textarea
+            id="newMessage"
+            placeholder="Share your thoughts, feelings, or just say hi... I'm always listening ❤️"
+          ></textarea>
+          <button onclick="addMessage()" class="submit-btn">
+            <i class="fas fa-paper-plane"></i>
+            Send Love Note
+          </button>
+        </div>
+
+        <div class="messages-display">
+          <h3>Our Love Notes Collection 💝</h3>
+          <div id="messagesList" class="messages-list">
+            {% if custom_messages %} {% for msg in custom_messages %}
+            <div class="message-item">
+              <p class="message-text">{{ msg.text }}</p>
+              <span class="message-date">{{ msg.date }}</span>
+            </div>
+            {% endfor %} {% else %}
+            <p class="no-messages">
+              Our message wall is waiting for your first note, Shristi! ✨💕
+            </p>
+            {% endif %}
+          </div>
+        </div>
+      </section>
+
+      <!-- Final Message Section -->
+      <section class="final-section">
+        <div class="final-content">
+          <h2 class="final-title">To My Beautiful Love 💕</h2>
+
+          <div class="final-message">
+            <p><strong>My Dearest Shristi,</strong></p>
+
+            <p>
+              Main tumse mila tha bas ek hackathon ke bahane—but pata nahi baat
+              karte karte kaise itni gehari baat ban gayi. Bolte hain na, jo
+              hota hai achhe ke liye hota hai. Main tumse mila, iske liye main
+              Bhagwan ka bahut dhanyavaad karta hoon ki unhone mujhe tumse
+              milaya.
+            </p>
+
+            <p>
+              Though there's one regret that will always stay with me—kash thoda
+              aur pehle milata, jisse hum log milke ek dusre ke saath life enjoy
+              karte. But anyways, Bhagwan ka main bahut shukriya ada karta hoon
+              ki unhone mujhe tumse milaya.
+            </p>
+
+            <p>
+              Pata hai? Mujhe tumse baat karna, tumhare saath time spend karna
+              bahut achha lagta hai. Jitna time main tumhare saath hota hoon, wo
+              mere life ka best moment ban jata hai. Seriously, tumhare bina ab
+              kuch bhi achha nahi lagta.
+            </p>
+
+            <p>
+              Tumhe yaad hai jab first time tum mere haath mein haath rakhi thi?
+              Wo mere pure life ka best memory mein se ek ban gaya. Main tumhe
+              bata nahi sakta ki main us time kaisa feel kar raha tha—bas keh
+              sakte hain world ki best feeling thi. Aur phir jab tumne mere
+              haath pe apna sar rakha... world ki best feeling ever. Pure magic,
+              baby. ✨
+            </p>
+
+            <p>
+              Mera first sunrise tumhare saath—us din maine apne pure life ka
+              first kiss kiya. Yaar, it was incredible! Matlab kuch bhi word
+              feeka hai jab hum first time kiss kiye the.
+              <strong>September 19th, 2025</strong>—ye date mere dil pe hamesha
+              ke liye likhi hai.
+            </p>
+
+            <p>
+              Har ek memory tumhare saath unforgettable hai. Jab hum log mandir
+              gaye the saath mein, ek dusre ka haath mein haath dalke—itna
+              sukoon mila. Wo din jab hum log first time clothes color
+              coordination karke pehne the—mujhe bahut achha feel hua tha. Mujhe
+              us time tak koi fark hi nahi padne laga ki koi mere baare mein kya
+              soch raha hoga. Bas tum thi aur main tha—that's all that mattered.
+              💫
+            </p>
+
+            <p>
+              Baby, I love you so, so, <em>soooo</em> much. Thank you ye saare
+              memories ke liye. Pata hai, "thank you" toh bahut kam hai inke
+              samne, but I love you endlessly, forever and always.
+            </p>
+
+            <p>
+              Main bahut introvert tha yaar. Kabhi bhi kisi ke saath bhi apna
+              feelings share nahi karta tha, sab kuch andar hi rakhta tha. Lekin
+              jabse tum mere life mein aayi ho, main bahut khush rehne laga
+              hoon. Tumne mere dil ke wo darwaze khol diye jinke baare mein
+              mujhe pata bhi nahi tha. Aur mujhe ye khushi—ye zinda hone ka
+              ehsaas—mera bacha hua pura life chahiye, sirf tumhare saath.
+            </p>
+
+            <p>
+              Main tumhare saath kitna bhi memories bana loon, mere liye kam hi
+              hai. Hamesha aur chahiye—more moments, more laughter, more of
+              <em>us</em>. 💕
+            </p>
+
+            <p>
+              I promise you this with everything I am. Main hamesha tumhare
+              saath rahunga, tumhara saath dunga, aur bas tumhara hi rahunga. I
+              want you, baby, humesha ke liye, apne pure life ke liye. Forever.
+            </p>
+
+            <div class="love-verse">
+              <p>
+                <strong>Tu mili toh lagta hai sab kuch mila,</strong><br />
+                <strong>Ab bas tu hi tu, aur kuch bhi na chahiya.</strong>
+              </p>
+            </div>
+
+            <p>
+              I met you by chance, but now you're my destiny. Since you arrived,
+              my world transformed into something beautiful. Your hand in mine,
+              that gentle touch—it told my heart, "This is love, infinite and
+              true."
+            </p>
+
+            <p>
+              That first sunrise with you, that first divine kiss—it felt like
+              the universe whispered, "She's yours now." Every moment with you
+              is a dream come alive. This life, this heart, this soul—everything
+              belongs to you.
+            </p>
+
+            <div class="love-verse">
+              <p>
+                <strong
+                  >Main wada karta hoon, har janam main tumhara rahunga,</strong
+                ><br />
+                <strong
+                  >Chahe duniya badal jaaye, main sirf tumhara kahunga.</strong
+                >
+              </p>
+            </div>
+
+            <p>I promise—in every lifetime, in every world, I will be yours.</p>
+
+            <p class="love-closing">
+              <em>Yours, forever and always,<br />With all my love</em> ❤️✨
+            </p>
+
+            <p class="love-final">
+              <strong
+                >I love you, my beautiful girl. Today, tomorrow, and for all the
+                tomorrows to come.</strong
+              >
+              💕🌹
+            </p>
+          </div>
+
+          <!-- Animated Gift -->
+          <div class="gift-container">
+            <div class="gift-box">
+              <div class="gift-lid"></div>
+              <div class="gift-body"></div>
+              <div class="gift-ribbon"></div>
+            </div>
+            <div class="gift-hearts">
+              <span>💕</span>
+              <span>💖</span>
+              <span>💗</span>
+              <span>💝</span>
+              <span>💕</span>
+            </div>
+          </div>
+
+          <p class="final-signature">Forever yours, with all my love 💫</p>
+          <p class="final-note">
+            P.S. This is just the beginning of our beautiful story together 🌅
+          </p>
+        </div>
+      </section>
+    </div>
+
+    <!-- Bottom Signature -->
+    <div class="bottom-signature">
+      <p>Made with endless love,</p>
+      <p>Your Shreekant 💕</p>
+      <p>For my precious "Sona" — mera bacha ✨❤️</p>
+    </div>
+
+    <!-- Modal for Image Lightbox -->
+    <div id="imageModal" class="modal">
+      <span class="close-modal" onclick="closeModal()">&times;</span>
+      <img class="modal-content" id="modalImage" />
+      <div id="caption"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>
